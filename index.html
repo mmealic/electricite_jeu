@@ -520,6 +520,7 @@ const app=document.getElementById("app"), KEY="voltio-v1";
 const $=s=>app.querySelector(s), $$=s=>app.querySelectorAll(s);
 let S={xp:0,stars:{},streak:0,last:"",lang:"fr"}, L=null;
 try{const r=localStorage.getItem(KEY); if(r) S=Object.assign(S,JSON.parse(r));}catch(e){}
+S.lang="fr";
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 const T=x=>x==null?"":(typeof x==="string"?x:(x[S.lang]!=null?x[S.lang]:x.fr));
 const fmt=n=>S.lang==="fr"?String(n).replace(".",","):String(n);
@@ -532,13 +533,11 @@ function home(){
     return `<li><button class="node ${st?"lit":""}" data-id="${id}"><span class="lamp">${LAMP}</span><span class="nt"><strong>${title}</strong><span>${sub}</span><span class="stars" aria-label="${st}/3">${"★".repeat(st)}${"☆".repeat(3-st)}</span></span></button></li>`;};
   app.innerHTML=`<div class="home">
     <header class="top"><span class="logo">Voltio</span>
-      <span class="stat" title="${T(UI.days)}">🔥 ${S.streak}</span><span class="stat">⚡ ${S.xp} XP</span>
-      <button class="lang" id="lang">${S.lang==="fr"?"English":"Français"}</button></header>
+      <span class="stat" title="${T(UI.days)}">🔥 ${S.streak}</span><span class="stat">⚡ ${S.xp} XP</span></header>
     <h1>${T(UI.h1)}</h1><p class="intro">${T(UI.intro)}</p>
     <ul class="path">${U.map(u=>row(u.id,T(u.title),T(u.sub))).join("")}${row("boss",T(UI.boss),T(UI.bossSub))}</ul>
     <button class="reset" id="reset">${T(UI.reset)}</button></div>`;
   $$(".node").forEach(b=>b.onclick=()=>start(b.dataset.id));
-  $("#lang").onclick=()=>{S.lang=S.lang==="fr"?"en":"fr"; save(); home();};
   const r=$("#reset"); r.onclick=()=>{ if(r.dataset.sure){S.xp=0;S.stars={};S.streak=0;S.last="";save();home();} else {r.dataset.sure=1; r.textContent=T(UI.sure);} };
   window.scrollTo(0,0);
 }
